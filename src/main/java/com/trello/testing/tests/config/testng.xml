@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="allTest" parallel="false">
+
+    <test name="allTests" preserve-order="true" verbose="1">
+        <packages>
+            <package name="com.trello.testing.tests.*"/>
+        </packages>
+    </test>
+
+</suite>
