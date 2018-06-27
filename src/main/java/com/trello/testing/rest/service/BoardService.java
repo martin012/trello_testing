@@ -2,8 +2,9 @@ package com.trello.testing.rest.service;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.HttpRequestWithBody;
 import com.trello.testing.common.GlobalVariables;
+import com.trello.testing.exceptions.rest.BadAuthServiceException;
+import com.trello.testing.exceptions.rest.ServiceException;
 import com.trello.testing.rest.http.RequestClient;
 import com.trello.testing.core.dto.BoardDto;
 
@@ -25,7 +26,7 @@ public class BoardService {
      * @return                  http response
      * @throws UnirestException
      */
-    public static HttpResponse<BoardDto> createBoard(Map<String, Object> queryParams) throws UnirestException {
+    public static HttpResponse<BoardDto> createBoard(Map<String, Object> queryParams) throws BadAuthServiceException, ServiceException {
 
         queryParams.putAll(GlobalVariables.authParameters);
 
@@ -40,14 +41,14 @@ public class BoardService {
      * @return              http response
      * @throws UnirestException
      */
-    public static HttpRequestWithBody deleteBoard(String id, Map<String, Object> queryParams) throws UnirestException {
+    public static HttpResponse<String> deleteBoard(String id, Map<String, Object> queryParams) throws BadAuthServiceException, ServiceException {
 
         queryParams.putAll(GlobalVariables.authParameters);
 
         return RequestClient.deleteObject(BOARDS_URL + id, queryParams);
     }
 
-    public static HttpRequestWithBody deleteBoard(String id) throws UnirestException {
+    public static HttpResponse<String> deleteBoard(String id) throws BadAuthServiceException, ServiceException {
 
         return deleteBoard(id, new HashMap<String, Object>());
     }

@@ -1,5 +1,7 @@
 package com.trello.testing.web;
 
+import com.trello.testing.exceptions.web.BrowserException;
+import com.trello.testing.exceptions.web.WebElementException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import com.trello.testing.web.browser.Chrome;
@@ -24,19 +26,27 @@ public class ListCards {
      * @param  listName name of the list
      * @return list     if there is expected list
      *         null     otherwise
+     * @throws BrowserException
      */
-    public static WebElement getList(String listName) {
+    public static WebElement getList(String listName) throws BrowserException {
 
-        List<WebElement> allLists = Chrome.getDriver().findElements(By.cssSelector(LIST_CSS));
+        try {
 
-        for(WebElement list : allLists) {
+            List<WebElement> allLists = Chrome.findElementsByCss(LIST_CSS);
 
-            String name = list.findElement(By.cssSelector(LIST_NAME_CSS)).getText();
+            for(WebElement list : allLists) {
 
-            if(name.equals(listName)) {
+                String name = list.findElement(By.cssSelector(LIST_NAME_CSS)).getText();
 
-                return list;
+                if(name.equals(listName)) {
+
+                    return list;
+                }
             }
+
+        } catch (WebElementException e) {
+
+            throw new BrowserException("Unable to get list ", e);
         }
 
         return null;
@@ -47,16 +57,24 @@ public class ListCards {
      *
      * @param  listName name of the list
      * @param  cardName name for new card
+     * @throws BrowserException
      */
-    public static void addCard(String listName, String cardName) {
+    public static void addCard(String listName, String cardName) throws BrowserException {
 
-        // Find expected list
-        WebElement list = getList(listName);
-        list.findElement(By.cssSelector(ADD_CARD_CSS)).click();
+        try {
 
-        // Add title and click on submit button
-        Chrome.getDriver().findElement(By.cssSelector(ADD_CARD_TITLE_CSS)).sendKeys(cardName);
-        Chrome.getDriver().findElement(By.cssSelector(ADD_CARD_BUTTON_CSS)).click();
+            // Find expected list
+            WebElement list = getList(listName);
+            list.findElement(By.cssSelector(ADD_CARD_CSS)).click();
+
+            // Add title and click on submit button
+            Chrome.findElementByCss(ADD_CARD_TITLE_CSS).sendKeys(cardName);
+            Chrome.findElementByCss(ADD_CARD_BUTTON_CSS).click();
+
+        } catch (WebElementException e) {
+
+            throw new BrowserException("Unable to add card ", e);
+        }
     }
 
 }

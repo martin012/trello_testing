@@ -4,7 +4,12 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.trello.testing.core.dto.BoardDto;
 import com.trello.testing.core.dto.ListDto;
+import com.trello.testing.exceptions.rest.BadAuthServiceException;
+import com.trello.testing.exceptions.rest.ServiceException;
+import com.trello.testing.exceptions.web.BrowserException;
+import com.trello.testing.web.check.TextCheck;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import com.trello.testing.rest.service.BoardService;
 import com.trello.testing.rest.service.ListService;
@@ -26,7 +31,7 @@ public class CardTest {
     private String IMAGE_LINK = "https://www.gstatic.com/webp/gallery3/2.png";
 
     @BeforeTest
-    public void setUp() throws UnirestException {
+    public void setUp() throws UnirestException, BadAuthServiceException, ServiceException {
 
         // Create a board by com.trello.testing.rest api
         HashMap<String, Object> boardParameters = new HashMap<String, Object>();
@@ -41,11 +46,10 @@ public class CardTest {
     }
 
     @Test
-    public void createCard() throws UnirestException {
+    public void createCard() throws ServiceException, BrowserException {
 
         // Log in to Trello
-        LoginPage.getPage();
-        LoginPage.logIn();
+        LoginPage.loginWithCheck();
 
         // Find the board
         BoardsDrawer.findBoard(BOARD_NAME);
@@ -58,10 +62,22 @@ public class CardTest {
         Card.openCard(list, CARD_NAME);
 
         // Edit the card
+
+        // Add description and verify
         Card.addDescription(SIMPLE_TEXT);
+        TextCheck.checkText(Card.getDescription(), SIMPLE_TEXT, "Description is not added");
+
+        // Add checklist and verify
         Card.addChecklist(SIMPLE_TEXT);
+        TextCheck.checkAnyMatch(Card.getChecklistsTitles(), SIMPLE_TEXT, "Checklist is not added");
+
+        // Upload image and verify
         Card.uploadImage(IMAGE_LINK);
+        Assert.assertEquals(Card.getImageAttachments().size(), 1, "Image is not added");
+
+        // Add comment and verify
         Card.addComment(SIMPLE_TEXT);
+        Assert.assertEquals(Card.getComments(SIMPLE_TEXT).size(), 1, "Comment is not added");
     }
 
     @AfterTest

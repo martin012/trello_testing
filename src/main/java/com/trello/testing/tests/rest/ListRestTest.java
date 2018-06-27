@@ -1,9 +1,10 @@
 package com.trello.testing.tests.rest;
 
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.trello.testing.core.dto.BoardDto;
 import com.trello.testing.core.dto.ListDto;
+import com.trello.testing.exceptions.rest.BadAuthServiceException;
+import com.trello.testing.exceptions.rest.ServiceException;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -22,7 +23,7 @@ public class ListRestTest {
     BoardDto board;
 
     @BeforeTest
-    public void setUp() throws UnirestException {
+    public void setUp() throws BadAuthServiceException, ServiceException {
 
         // Create a board by com.trello.testing.rest api
         HashMap<String, Object> boardParameters = new HashMap<String, Object>();
@@ -32,7 +33,7 @@ public class ListRestTest {
     }
 
     @Test
-    public void createList() throws UnirestException {
+    public void createList() throws BadAuthServiceException, ServiceException {
 
         // Create a list on the board by com.trello.testing.rest api
         HashMap<String, Object> listParameters = new HashMap<String, Object>();
@@ -51,7 +52,7 @@ public class ListRestTest {
     }
 
     @AfterTest
-    public void cleanUp() throws UnirestException {
+    public void cleanUp() throws BadAuthServiceException, ServiceException {
         BoardService.deleteBoard(board.getId());
     }
 

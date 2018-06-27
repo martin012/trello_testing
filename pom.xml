@@ -30,6 +30,9 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>${build.sourceDirectory}/tests/config/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertiesFile>
+                        <!-- Add file with your system properties for project -->
+                    </systemPropertiesFile>
                 </configuration>
             </plugin>
             <plugin>

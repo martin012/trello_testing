@@ -3,6 +3,8 @@ package com.trello.testing.rest.service;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.trello.testing.common.GlobalVariables;
+import com.trello.testing.exceptions.rest.BadAuthServiceException;
+import com.trello.testing.exceptions.rest.ServiceException;
 import com.trello.testing.rest.http.RequestClient;
 import com.trello.testing.core.dto.ListDto;
 
@@ -22,7 +24,7 @@ public class ListService {
      * @return
      * @throws UnirestException
      */
-    public static HttpResponse<ListDto> createList(Map<String, Object> queryParams) throws UnirestException {
+    public static HttpResponse<ListDto> createList(Map<String, Object> queryParams) throws BadAuthServiceException, ServiceException {
 
         queryParams.putAll(GlobalVariables.authParameters);
 

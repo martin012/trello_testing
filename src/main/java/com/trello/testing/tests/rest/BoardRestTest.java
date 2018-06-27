@@ -1,8 +1,9 @@
 package com.trello.testing.tests.rest;
 
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.trello.testing.core.dto.BoardDto;
+import com.trello.testing.exceptions.rest.BadAuthServiceException;
+import com.trello.testing.exceptions.rest.ServiceException;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
@@ -18,7 +19,7 @@ public class BoardRestTest {
     BoardDto board;
 
     @Test
-    public void createBoard() throws UnirestException {
+    public void createBoard() throws BadAuthServiceException, ServiceException {
 
         // Create a board by com.trello.testing.rest api
         HashMap<String, Object> boardParameters = new HashMap<String, Object>();
@@ -35,7 +36,7 @@ public class BoardRestTest {
     }
 
     @AfterTest
-    public void cleanUp() throws UnirestException {
+    public void cleanUp() throws BadAuthServiceException, ServiceException {
         BoardService.deleteBoard(board.getId());
     }
 

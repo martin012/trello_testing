@@ -1,7 +1,8 @@
 package com.trello.testing.web;
 
-import org.openqa.selenium.By;
 import com.trello.testing.web.browser.Chrome;
+import com.trello.testing.exceptions.web.BrowserException;
+import com.trello.testing.exceptions.web.WebElementException;
 
 /**
  * Manipulate with boards drawer in browser.
@@ -17,11 +18,20 @@ public class BoardsDrawer {
      * Find the board and click on first result
      *
      * @param  boardName name of expected board
+     * @throws BrowserException
      */
-    public static void findBoard(String boardName) {
-        Chrome.getDriver().findElement(By.cssSelector(BOARDS_MENU_CSS)).click();
-        Chrome.getDriver().findElement(By.cssSelector(SEARCH_BOARDS_CSS)).sendKeys(boardName);
-        Chrome.getDriver().findElement(By.cssSelector(BOARD_TITLE_CSS)).click();
+    public static void findBoard(String boardName) throws BrowserException {
+
+        try {
+
+            Chrome.findElementByCss(BOARDS_MENU_CSS).click();
+            Chrome.findElementByCss(SEARCH_BOARDS_CSS).sendKeys(boardName);
+            Chrome.findElementByCss(BOARD_TITLE_CSS).click();
+
+        } catch (WebElementException e) {
+
+            throw new BrowserException("Unable to find boards drawer", e);
+        }
     }
 
 }

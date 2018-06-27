@@ -1,5 +1,6 @@
 package com.trello.testing.common;
 
+import org.testng.util.Strings;
 import java.util.HashMap;
 
 /**
@@ -8,14 +9,15 @@ import java.util.HashMap;
 public class GlobalVariables {
 
     // Profile information for account
-    public static final String MAIL = "";
-    public static final String PASSWORD = "";
-    public static final String KEY = "";
-    public static final String TOKEN = "";
+    public static final String MAIL = System.getProperty("mail", "");
+    public static final String PASSWORD =  System.getProperty("password", "");
+    public static final String KEY =  System.getProperty("key", "");
+    public static final String TOKEN = System.getProperty("token", "");
 
     public static final HashMap<String, Object> authParameters =  new HashMap<String, Object>() {{
-        put("key", GlobalVariables.KEY);
-        put("token", GlobalVariables.TOKEN);
+
+        put("key", KEY);
+        put("token", TOKEN);
     }};
 
     // URL's
